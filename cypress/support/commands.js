@@ -38,19 +38,3 @@ Cypress.Commands.add('waitForLoadingImage', () => {
     // Lading can be long on TravisCI.
     cy.get('.loading-images', { timeout: 60000 }).should('not.exist')
 })
-
-Cypress.Commands.add('parseTargetDrakeLink',()=>{
-    //selectors are:
-    //('.target-drake-container .geniblocks.organism img')
-    //('#target-drake img')
-    //example link to parse https://geniverse-resources.concord.org/resources/drakes/images/st_f_noWing_fore_a5_flair_horn_noRostral_healthy.png
-    var targetDrakeLink='', str=[], drakeInfo=[], drakeAttributes=[];
-
-    return cy.get(this.getTARGET_DRAKE_IMAGE()).then(($img)=>{
-        targetDrakeLink = $img.prop('src');
-        str = targetDrakeLink.split('/');
-        drakeInfo = str[str.length-1].split('.');
-        drakeAttributes = drakeInfo[drakeInfo.length-1].split('_');
-        return drakeAttributes;
-    })
-})    
