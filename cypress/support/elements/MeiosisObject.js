@@ -72,40 +72,39 @@ class MeiosisObject {
     //     return drakeAttributes;
     // }
 
-    getCurrentDropDownValues(){
-        return this.getDROPDOWN_TEXT().each(($dropdown, index, $dropdownList)=>{
-            var textArr = []
-            $dropdown.invoke('text').then(($text)=>{
-                textArr.push($text);
-            })
-            console.log ("Dropdown values are: "+textArr)
-            return textArr;
-        })
+    getCurrentDropDownValue(index){
+        return this.getDROPDOWN_TEXT().eq(index).text()
     }
     
     addTrait(trait){
         cy.log('in addTrait');
-        var index = -1;
-        var opp = (trait.slice(0,-1))+'less'
-        var currentDrakeTraits = this.getCurrentDropDownValues();
-        console.log("currentDrakeTraits: "+currentDrakeTraits)
-        // if (!currentDrakeTraits.include(trait)) {
-        //     index = currentDrakeTraits.indexOf(opp);
-        // }
-        // this.selectTrait(index, trait)
+        var opp = (trait.slice(0,-1))+'less';
+
+         cy.get('.geniblocks.genome').then(($geneBlock)=>{
+            if (($geneBlock.text().includes(trait))) {
+                cy.log('in if -- trait is already exist')
+            } else {
+                cy.log('in else -- need to change a trait')
+                this.getDROPDOWN_TEXT().contains(opp).first().click();
+                this.getDROPDOWN_MENU_ITEM(trait).first().click();
+            }
+        })
     }
 
     removeTrait(trait){
         cy.log('in removeTrait');
-        var index = -1;
         var opp = (trait.slice(0,-1))+'less'
-        var currentDrakeTraits = this.getCurrentDropDownValues();
-        console.log("currentDrakeTraits: "+currentDrakeTraits)
 
-        // if (!currentDrakeTraits.include(opp)) {
-        //     index = currentDrakeTraits.indexOf(trait);
-        // }
-        // this.selectTrait(index, opp)
+        cy.get('.geniblocks.genome').then(($geneBlock)=>{
+            cy.log(($geneBlock.text().includes(trait)))
+            if (($geneBlock.text().includes(trait))) {
+                cy.log('in if -- trait exist so need to remove')
+                this.getDROPDOWN_TEXT().contains(trait).first().click();
+                this.getDROPDOWN_MENU_ITEM(opp).first().click();
+            } else {
+                cy.log('in else -- trait is removed')
+            }
+        })
     }
 
 
