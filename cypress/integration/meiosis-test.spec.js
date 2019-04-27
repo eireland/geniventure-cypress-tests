@@ -5,65 +5,73 @@ const meiosis = new MeiosisObject;
 context('Meiosis challenges tests', ()=>{
     before(()=>{
         cy.visit('https://geniventure.concord.org/#/1/2/1');
+        cy.waitForLoadingImage()
+        cy.get('#enter-challenge-hotspot').click();
+        cy.waitForLoadingImage()
+        cy.get('.tutorial-close').click();
     })
     describe('Challenge 1.2.1', ()=>{
-        // it.only('test dropdown locators',()=>{
-        //     meiosis.addTrait('Arms')
-        //     meiosis.addTrait('Legs')
-        //     meiosis.addTrait('Wings')
-        //     meiosis.removeTrait('Arms')
-        //     meiosis.removeTrait('Legs')
-        //     meiosis.removeTrait('Wings')
+        it('test dropdown are working',()=>{
+            meiosis.addTrait('Arms')
+            meiosis.addTrait('Legs')
+            meiosis.addTrait('Wings')
+            //verify that your drake has all traits
+            meiosis.removeTrait('Arms')
+            meiosis.removeTrait('Legs')
+            meiosis.removeTrait('Wings')
+            //verify that your drake has all traits removed
+        })
+        it.only('will try to get the target drake', ()=>{
+            cy.waitForTargetDrake();
+            meiosis.parseDrakeLink('target').then((target)=>{
+                //st,m,wing,fore,a5,flair,horn,noRostral,healthy
+                cy.log("target: "+target);
+                meiosis.parseDrakeLink('current').then((current)=>{
+                    cy.log("current: "+current);
 
-        // })
-
-        // it('test dropdowns are working', ()=>{
-        //     var targetDrakeTraits = [], 
-        //         currentDrakeTraits = [],
-
-        //     targetDrakeTraits = meiosis.parseDrakeLink('target');
-        //     currentDrakeTraits = meiosis.getCurrentDropDownValues();
-            
-        //     if ((targetDrakeTraits.include("allLimb")) || ((targetDrakeTraits.include("fore")))) {
-        //         if (!currentDrakeTraits.include("Arms")) { 
-        //             meiosis.addTrait('Arms');
-        //         }
-        //     }
-        //     if ((targetDrakeTraits.include("allLimb")) || ((targetDrakeTraits.include("hind")))) {
-        //         if (!currentDrakeTraits.include("Legs")) { 
-        //             meiosis.addTrait('Legs');
-        //         }
-        //     }
-        //     if (targetDrakeTraits.include("wing")) {
-        //         if (!currentDrakeTraits.include("Wings")) { 
-        //             meiosis.addTrait('Wings');
-        //         }
-        //     }
-        //     if (targetDrakeTraits.include("wing")) {
-        //         if (!currentDrakeTraits.include("Wings")) { 
-        //             meiosis.addTrait('Wings');
-        //         }
-        //     }
-
-            
-        //     //Have to make sure both alleles are -less when noWing and noLimb 
-        //     while(meiosis.getDrakeLink('current') != meiosis.getDrakeLink('target')) {
-        //         if (targetDrakeTraits.include("noWing")) {
-        //             if (currentDrakeTraits.include("Wings")) { 
-        //                 meiosis.addTrait('Wingless');
-        //             }
-        //         }
-        //         if (targetDrakeTraits.include("noLimb")) {
-        //             if (currentDrakeTraits.include("Arms")) { 
-        //                 meiosis.addTrait('Armless');
-        //             }
-        //             if (currentDrakeTraits.include("Leg")) { 
-        //                 meiosis.addTrait('Legless');
-        //             }
-        //         }
-        //     } 
-        //     //while loop makes sure that dominant traits do not exist if the trait is not there.
-            
+                    if (target.includes('wing')){
+                        cy.log('has wings')
+                        meiosis.addTrait('Wings')
+                    };
+                    if (target.includes('noWing')){
+                        cy.log('has wings')
+                        meiosis.addTrait('Wings')
+                    };
+                    if (target.includes('allLimb')){
+                        cy.log('has both arms and legs')
+                        meiosis.addTrait('Arms')
+                        meiosis.addTrait('Legs')
+                    }
+                    if (target.includes('noLimb')) {
+                        meiosis.removeTrait('Arms');
+                        meiosis.removeTrait('Legs');
+                    }
+                    if (target.includes('fore')){
+                        cy.log('has arms only')
+                        meiosis.addTrait('Arms')
+                        meiosis.removeTrait('Legs');
+                    }
+                    if (target.includes('hind')) {
+                        cy.log('has legs only')
+                        meiosis.addTrait('Legs')
+                        meiosis.removeTrait('Arms');
+                    }
+                    if ((target.includes('m')) && (current.includes('f'))){
+                        cy.log('is male')                    
+                        meiosis.selectGender("m")
+                    } 
+                    if ((target.includes('f')) && (current.includes('m'))){
+                        cy.log('is female')
+                        meiosis.selectGender('f')
+                    }
+                })
+                meiosis.parseDrakeLink('current').then((current)=>{
+                    cy.log("current: "+current);
+                    cy.log("target: "+target);
+                    cy.log(current.every(t=>target.includes(t)))//A.every( e => B.includes(e) )
+                })    
+            })
+        })
         // })
         // it('verify meiosis hints come up', ()=>{
 

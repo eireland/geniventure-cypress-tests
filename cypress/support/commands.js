@@ -23,18 +23,22 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command'
-// import fs from 'fs-extra'
-// import path from 'path'
+// import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command'
+// // import fs from 'fs-extra'
+// // import path from 'path'
 
-addMatchImageSnapshotCommand({ //need to fine tune threshholds
-  failureThreshold: 0.5, // threshold for entire image
-  failureThresholdType: 'percent', // percent of image or number of pixels
-  customDiffConfig: { threshold: 0.9 }, // threshold for each pixel
-  capture: 'viewport' // capture viewport in screenshot
-})
+// addMatchImageSnapshotCommand({ //need to fine tune threshholds
+//   failureThreshold: 0.5, // threshold for entire image
+//   failureThresholdType: 'percent', // percent of image or number of pixels
+//   customDiffConfig: { threshold: 0.9 }, // threshold for each pixel
+//   capture: 'viewport' // capture viewport in screenshot
+// })
 
 Cypress.Commands.add('waitForLoadingImage', () => {
     // Lading can be long on TravisCI.
     cy.get('.loading-images', { timeout: 60000 }).should('not.exist')
+})
+Cypress.Commands.add('waitForTargetDrake', () => {
+    // Lading can be long on TravisCI.
+    cy.get('#target-drake > img', { timeout: 60000 }).should('exist')
 })

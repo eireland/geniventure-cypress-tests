@@ -3,7 +3,10 @@ class MeiosisObject {
     recessiveTraits = ['Horns','Albino','Dull','Short tail','Faded'];
 
     getYOUR_DRAKE_IMAGE() {
-        return cy.get("#your-drake .geniblocks.organism img")
+        return ("#your-drake .geniblocks.organism img")
+    }
+    getTARGET_DRAKE_IMAGE() {
+        return ('#target-drake > img')
     }
     getHATCH_DRAKE_BUTTON() {
         return cy.get('.hatch-drake-button')
@@ -20,20 +23,21 @@ class MeiosisObject {
         return cy.get('.fv-gene-option-value div')
     }
     getDROPDOWN_MENU_ITEM() {
-        return cy.get('#mountNode .dropdown-menu  .fv-gene-option')
+        // return cy.get('#mountNode .dropdown-menu')
+        return cy.get('#mountNode .dropdown-menu .fv-gene-option')
     }
     getTARGET_DRAKE_IMAGE() {
-        return cy.get('#target-drake > img')
+        return ('#target-drake > img')
     }
     getSTABLE_DRAKE() {
         return cy.get('.stable-drake-overlay')
     }
   
     selectGender(gender) {
-      if (gender=="female"){
+      if (gender=="f"){
         this.getFEMALE_LABEL().click();
-      } else if (gender=='male') {
-          this.getMALE_LABEL.click();
+      } else if (gender=='m') {
+          this.getMALE_LABEL().click();
       }
     }
   
@@ -46,47 +50,49 @@ class MeiosisObject {
     //     this.getHATCH_DRAKE_BUTTON.click();
     // }
 
-    // getDrakeLink(drake){
-    //     switch (drake) {
-    //         case "target":
-    //             el = this.getTARGET_DRAKE_IMAGE()
-    //         case "current":
-    //             el = this.getYOUR_DRAKE_IMAGE();
-    //     }  
+    parseDrakeLink(drake){
+        var str=[], drakeInfo=[], drakeAttributes=[], el = '';
+        if (drake == "target") {
+            el = this.getTARGET_DRAKE_IMAGE();
+        } else if (drake =='current') {
+            el = this.getYOUR_DRAKE_IMAGE();
+        }
 
-    //     return imageLink = el.then(($img)=>{
-    //         console.log("drake link is: "+ $img.prop('src'))
-    //          return drakeLink = $img.prop('src');
-    //         })
-    // }
+        return cy.get(el)
+            .then((img)=>{
+                return img.prop('src')
+            })
+            .then((link)=>{
+                    str = link.split('/');
+                    drakeInfo = str[str.length-1].split('.');
+                    drakeAttributes = drakeInfo[0].split('_');
+                    console.log('drakeAttributes: '+drakeAttributes);
+                    return drakeAttributes; 
+            });
 
-    // parseDrakeLink(drake){
-    //     //example link to parse https://geniverse-resources.concord.org/resources/drakes/images/st_f_noWing_fore_a5_flair_horn_noRostral_healthy.png
-    //     var link='', str=[], drakeInfo=[], drakeAttributes=[];
-
-    //     link = this.getDrakeLink(drake);
-    //     str = link.split('/');
-    //     drakeInfo = str[str.length-1].split('.');
-    //     drakeAttributes = drakeInfo[drakeInfo.length-1].split('_');
-    //     console.log('drakeAttributes: '+drakeAttributes);
-    //     return drakeAttributes;
-    // }
+    }
 
     getCurrentDropDownValue(index){
         return this.getDROPDOWN_TEXT().eq(index).text()
     }
     
     addTrait(trait){
-        cy.log('in addTrait');
+        cy.log('in addTrait. trait is: '+trait);
         var opp = (trait.slice(0,-1))+'less';
 
          cy.get('.geniblocks.genome').then(($geneBlock)=>{
             if (($geneBlock.text().includes(trait))) {
-                cy.log('in if -- trait is already exist')
+                cy.log('in if -- trait is already exist');
             } else {
                 cy.log('in else -- need to change a trait')
                 this.getDROPDOWN_TEXT().contains(opp).first().click();
-                this.getDROPDOWN_MENU_ITEM(trait).first().click();
+                cy.wait(500);
+                this.getDROPDOWN_MENU_ITEM().contains(trait).first()
+                    .trigger('mousemove')
+                    .trigger('mouseover')
+                    .trigger('mousedown',{which:1}, {force:true})
+                    .trigger('mouseup', {which:1}, {force:true});
+                cy.wait(1000);
             }
         })
     }
@@ -100,7 +106,25 @@ class MeiosisObject {
             if (($geneBlock.text().includes(trait))) {
                 cy.log('in if -- trait exist so need to remove')
                 this.getDROPDOWN_TEXT().contains(trait).first().click();
-                this.getDROPDOWN_MENU_ITEM(opp).first().click();
+                this.getDROPDOWN_MENU_ITEM().contains(opp).first()//.click();
+                .trigger('mousemove')
+                .trigger('mouseover')
+                .trigger('mousedown',{which:1}, {force:true})
+                .trigger('mouseup', {which:1}, {force:true});
+                cy.wait(1000);
+            }
+        }) 
+        cy.get('.geniblocks.genome').then(($geneBlock)=>{
+            cy.log(($geneBlock.text().includes(trait)))   
+            if (($geneBlock.text().includes(trait))) { //because gene is dominant have to remove both
+                cy.log('in if -- trait exist so need to remove')
+                this.getDROPDOWN_TEXT().contains(trait).first().click();
+                this.getDROPDOWN_MENU_ITEM().contains(opp).first()//.click();
+                .trigger('mousemove')
+                .trigger('mouseover')
+                .trigger('mousedown',{which:1}, {force:true})
+                .trigger('mouseup', {which:1}, {force:true});
+                cy.wait(1000);
             } else {
                 cy.log('in else -- trait is removed')
             }
