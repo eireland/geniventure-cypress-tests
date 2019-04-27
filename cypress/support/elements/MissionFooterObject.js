@@ -21,6 +21,9 @@ class MissionFooterObject {
     getTutorialTitle(){
         return cy.get('#tutorial .tutorial-short');
     };
+    clickBackButton(){
+        cy.get('.tutorial-navigate.prev').click();
+    }
     clickNextButton(){
         cy.get('.tutorial-navigate.next').click();
     }

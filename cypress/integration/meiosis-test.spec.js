@@ -5,13 +5,13 @@ const meiosis = new MeiosisObject;
 const footer = new MissionFooterObject;
 
 context('Meiosis challenges tests', ()=>{
-    before(()=>{
-        cy.visit('https://geniventure.concord.org/#/1/2/1');
-        cy.waitForLoadingImage()
-        cy.get('#enter-challenge-hotspot').click();
-        cy.waitForLoadingImage()
-    })
     describe('Challenge 1.2.1', ()=>{
+        before(()=>{
+            cy.visit('https://geniventure.concord.org/#/1/2/1');
+            cy.waitForLoadingImage()
+            cy.get('#enter-challenge-hotspot').click();
+            cy.waitForLoadingImage()
+        })
         it('verify meiosis hints come up', ()=>{
             footer.getTutorialTitle().should('be.visible').and('contain', "Male/Female button");
             cy.get('.change-sex-toggle-group').then(($el)=>{
@@ -92,9 +92,39 @@ context('Meiosis challenges tests', ()=>{
             })
         })
 
-        // it('verify drakes appear in the stable', ()=>{
+    })
+    describe.only('Challenge 1.1.1', ()=>{
+        before(()=>{
+            cy.visit('https://geniventure.concord.org/#/1/1/1');
+            cy.waitForLoadingImage()
+            cy.get('#enter-challenge-hotspot').click();
+            cy.waitForLoadingImage()
+        })
+        it('verify hint is visible and can be paged through', ()=>{
+            footer.getTutorialTitle().should('be.visible').and('contain', "Chromosomes");
+            cy.get('.change-sex-toggle-group').then(($el)=>{
+                // expect($el).to.have.class('tutorial')
+                // expect($el).to.have.class('mini-pulse')
+            })
+            footer.clickNextButton();
+            footer.getTutorialTitle().should('be.visible').and('contain', "Genes");
+            footer.clickNextButton();
+            footer.getTutorialTitle().should('be.visible').and('contain', "Alleles");
+            footer.clickNextButton();
+            footer.getTutorialTitle().should('be.visible').and('contain', "Tutorial button");
+            footer.clickBackButton();
+            footer.getTutorialTitle().should('be.visible').and('contain', "Alleles");
+            footer.clickBackButton();
+            footer.getTutorialTitle().should('be.visible').and('contain', "Genes");
+            footer.closeTutorialDialog(); 
+            footer.getTutorialTitle().should('not.exist'); 
+            footer.getTutorialButton().click();
+            footer.getTutorialTitle().should('be.visible');
+            footer.closeTutorialDialog(); 
+        })
+        it('verify drakes appear in the stable', ()=>{
 
-        // })
+        })
     })
 
 
