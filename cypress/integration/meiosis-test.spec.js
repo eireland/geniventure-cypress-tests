@@ -16,12 +16,18 @@ context('Meiosis challenges tests', ()=>{
             meiosis.addTrait('Legs')
             meiosis.addTrait('Wings')
             //verify that your drake has all traits
+            meiosis.parseDrakeLink('current').should('include','allLimb')
+            meiosis.parseDrakeLink('current').should('include','wing')  
             meiosis.removeTrait('Arms')
             meiosis.removeTrait('Legs')
             meiosis.removeTrait('Wings')
             //verify that your drake has all traits removed
+            meiosis.parseDrakeLink('current').should('not.include','allLimb')
+            meiosis.parseDrakeLink('current').should('not.include','fore')
+            meiosis.parseDrakeLink('current').should('not.include','hind')
+            meiosis.parseDrakeLink('current').should('include','noWing')   
         })
-        it.only('will try to get the target drake', ()=>{
+        it('will try to get the target drake', ()=>{
             cy.waitForTargetDrake();
             meiosis.parseDrakeLink('target').then((target)=>{
                 //st,m,wing,fore,a5,flair,horn,noRostral,healthy
