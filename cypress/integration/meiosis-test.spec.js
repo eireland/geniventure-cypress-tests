@@ -1,6 +1,8 @@
 import MeiosisObject from "../support/elements/MeiosisObject";
+import MissionFooterObject from "../support/elements/MissionFooterObject";
 
 const meiosis = new MeiosisObject;
+const footer = new MissionFooterObject;
 
 context('Meiosis challenges tests', ()=>{
     before(()=>{
@@ -8,9 +10,20 @@ context('Meiosis challenges tests', ()=>{
         cy.waitForLoadingImage()
         cy.get('#enter-challenge-hotspot').click();
         cy.waitForLoadingImage()
-        cy.get('.tutorial-close').click();
     })
     describe('Challenge 1.2.1', ()=>{
+        it('verify meiosis hints come up', ()=>{
+            footer.getTutorialTitle().should('be.visible').and('contain', "Male/Female button");
+            cy.get('.change-sex-toggle-group').then(($el)=>{
+                // expect($el).to.have.class('tutorial')
+                // expect($el).to.have.class('mini-pulse')
+            })
+            footer.closeTutorialDialog(); 
+            footer.getTutorialTitle().should('not.exist'); 
+            footer.getTutorialButton().click();
+            footer.getTutorialTitle().should('be.visible');
+            footer.closeTutorialDialog(); 
+        });
         it('test dropdown are working',()=>{
             meiosis.addTrait('Arms')
             meiosis.addTrait('Legs')
@@ -78,10 +91,7 @@ context('Meiosis challenges tests', ()=>{
                 })    
             })
         })
-        // })
-        // it('verify meiosis hints come up', ()=>{
 
-        // });
         // it('verify drakes appear in the stable', ()=>{
 
         // })
