@@ -50,28 +50,6 @@ class MeiosisObject {
     //     this.getHATCH_DRAKE_BUTTON.click();
     // }
 
-    parseDrakeLink(drake){
-        var str=[], drakeInfo=[], drakeAttributes=[], el = '';
-        if (drake == "target") {
-            el = this.getTARGET_DRAKE_IMAGE();
-        } else if (drake =='current') {
-            el = this.getYOUR_DRAKE_IMAGE();
-        }
-
-        return cy.get(el)
-            .then((img)=>{
-                return img.prop('src')
-            })
-            .then((link)=>{
-                    str = link.split('/');
-                    drakeInfo = str[str.length-1].split('.');
-                    drakeAttributes = drakeInfo[0].split('_');
-                    console.log('drakeAttributes: '+drakeAttributes);
-                    return drakeAttributes; 
-            });
-
-    }
-
     getCurrentDropDownValue(index){
         return this.getDROPDOWN_TEXT().eq(index).text()
     }

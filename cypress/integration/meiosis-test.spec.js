@@ -29,23 +29,23 @@ context('Meiosis challenges tests', ()=>{
             meiosis.addTrait('Legs')
             meiosis.addTrait('Wings')
             //verify that your drake has all traits
-            meiosis.parseDrakeLink('current').should('include','allLimb')
-            meiosis.parseDrakeLink('current').should('include','wing')  
+            cy.parseDrakeLink('current').should('include','allLimb')
+            cy.parseDrakeLink('current').should('include','wing')  
             meiosis.removeTrait('Arms')
             meiosis.removeTrait('Legs')
             meiosis.removeTrait('Wings')
             //verify that your drake has all traits removed
-            meiosis.parseDrakeLink('current').should('not.include','allLimb')
-            meiosis.parseDrakeLink('current').should('not.include','fore')
-            meiosis.parseDrakeLink('current').should('not.include','hind')
-            meiosis.parseDrakeLink('current').should('include','noWing')   
+            cy.parseDrakeLink('current').should('not.include','allLimb')
+            cy.parseDrakeLink('current').should('not.include','fore')
+            cy.parseDrakeLink('current').should('not.include','hind')
+            cy.parseDrakeLink('current').should('include','noWing')   
         })
         it('will try to get the target drake', ()=>{
             cy.waitForTargetDrake();
-            meiosis.parseDrakeLink('target').then((target)=>{
+            cy.parseDrakeLink('target').then((target)=>{
                 //st,m,wing,fore,a5,flair,horn,noRostral,healthy
                 cy.log("target: "+target);
-                meiosis.parseDrakeLink('current').then((current)=>{
+                cy.parseDrakeLink('current').then((current)=>{
                     cy.log("current: "+current);
 
                     if (target.includes('wing')){
@@ -84,7 +84,7 @@ context('Meiosis challenges tests', ()=>{
                         meiosis.selectGender('f')
                     }
                 })
-                meiosis.parseDrakeLink('current').then((current)=>{
+                cy.parseDrakeLink('current').then((current)=>{
                     cy.log("current: "+current);
                     cy.log("target: "+target);
                     cy.log(current.every(t=>target.includes(t)))//A.every( e => B.includes(e) )
@@ -93,7 +93,7 @@ context('Meiosis challenges tests', ()=>{
         })
 
     })
-    describe.only('Challenge 1.1.1', ()=>{
+    describe('Challenge 1.1.1', ()=>{
         before(()=>{
             cy.visit('https://geniventure.concord.org/#/1/1/1');
             cy.waitForLoadingImage()

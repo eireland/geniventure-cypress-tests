@@ -42,3 +42,23 @@ Cypress.Commands.add('waitForTargetDrake', () => {
     // Lading can be long on TravisCI.
     cy.get('#target-drake > img', { timeout: 60000 }).should('exist')
 })
+Cypress.Commands.add('parseDrakeLink', (drake)=>{
+        var str=[], drakeInfo=[], drakeAttributes=[], el = '';
+        if (drake == "target") {
+            el = '#target-drake > img';
+        } else if (drake =='current') {
+            el = "#your-drake .geniblocks.organism img";
+        }
+
+        return cy.get(el)
+            .then((img)=>{
+                return img.prop('src')
+            })
+            .then((link)=>{
+                    str = link.split('/');
+                    drakeInfo = str[str.length-1].split('.');
+                    drakeAttributes = drakeInfo[0].split('_');
+                    console.log('drakeAttributes: '+drakeAttributes);
+                    return drakeAttributes; 
+            });
+})
