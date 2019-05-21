@@ -14,9 +14,8 @@ class EggBasketObject {
     getNotificationMessage() {
         return cy.get('.its-hint')
     }
-    getScoreCount() {
-        return cy.get('.score-count')
-    }
+    parseChromosomes(){
 
+    }
 }
 export default EggBasketObject
