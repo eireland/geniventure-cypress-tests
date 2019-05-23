@@ -17,9 +17,14 @@ class EggBasketObject {
     getChromosomeArea(){
         return cy.get('.geniblocks.genome')
     }
-    getChromosomeValues(){
+    selectEgg(num){
+        this.getEggs().eq(num)
+            .click({force:true})
+        cy.wait(3000) 
+    }
+     getChromosomeValues(){
         var traits = {arms:false, legs:false, wings:false};
-        eggBasket.getGeneLabelText().each(($el, index, $el_list)=>{
+        this.getGeneLabelText().each(($el, index, $el_list)=>{
             cy.wrap($el).text()
                 .then((text)=>{
                     if (text=='Arms') {
@@ -30,7 +35,7 @@ class EggBasketObject {
                     }
                 })
         });   
-        return traits
+        return traits;
     }
 }
 export default EggBasketObject

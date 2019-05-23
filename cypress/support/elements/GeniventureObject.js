@@ -36,6 +36,10 @@ class GeniventureObject{
     getGEM_NUMBER_TEXT (){
         return cy.get('.gem-number-text')
     }
+    getGem(num){
+        var gemClass='.gem-fill-'+num;
+        return cy.get(gemClass)
+    }
     getScoreCount() {
         return cy.get('.score-count')
     }
@@ -76,7 +80,6 @@ class GeniventureObject{
         this.getTRY_AGAIN_BUTTON().click();
     }
 
-    // .gem-fill-0=blue gem, .gem-fill-1=yellow gem, .gem-fill-2=red gem, .gem-fill-3=black retry gem
 
     openMap(){
         cy.log("In get_map")
@@ -95,3 +98,5 @@ class GeniventureObject{
     }
 }
 export default GeniventureObject
+
+// .gem-fill-0=blue gem, .gem-fill-1=yellow gem, .gem-fill-2=red gem, .gem-fill-3=black retry gem
