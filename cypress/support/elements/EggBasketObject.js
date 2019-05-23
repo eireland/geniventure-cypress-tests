@@ -14,8 +14,23 @@ class EggBasketObject {
     getNotificationMessage() {
         return cy.get('.its-hint')
     }
-    parseChromosomes(){
-
+    getChromosomeArea(){
+        return cy.get('.geniblocks.genome')
+    }
+    getChromosomeValues(){
+        var traits = {arms:false, legs:false, wings:false};
+        eggBasket.getGeneLabelText().each(($el, index, $el_list)=>{
+            cy.wrap($el).text()
+                .then((text)=>{
+                    if (text=='Arms') {
+                        traits.arms=true;
+                    }
+                    if (text=='Legs') {
+                        traits.legs=true;
+                    }
+                })
+        });   
+        return traits
     }
 }
 export default EggBasketObject

@@ -20,9 +20,9 @@ context('Egg Basket Game tests Challenge 2.1.2', ()=>{
         })
         it('verify chromosomes show when egg is clicked',()=>{
             eggBasket.getEggs().eq(2)
-                .should('be.visible')
                 .click({force:true})
-                
+            eggBasket.getChromosomeArea()
+                .should('be.visible')
         })
         it('verify baskets and labels are visible', ()=>{
             eggBasket.getBasketLabels().should('have.length', 3)
@@ -39,6 +39,7 @@ context('Egg Basket Game tests Challenge 2.1.2', ()=>{
     describe('play game', ()=>{
         describe('drop egg in correct basket', ()=>{
             it('will get chromosome values, and verify basket clicked on is highlighted', ()=>{
+                var traits;
                 var arms=false, legs=false;
                 eggBasket.getGeneLabelText().each(($el, index, $el_list)=>{
                     cy.wrap($el).text()
@@ -50,7 +51,9 @@ context('Egg Basket Game tests Challenge 2.1.2', ()=>{
                                 legs=true;
                             }
                         })
-                }).then(()=>{
+                })
+                // eggBasket.getChromosomeValues()
+                    .then(()=>{
                     if ((arms) && (legs)) {
                         eggBasket.getBasketLabels().contains('Drakes with arms and legs').siblings().click({force:true});
                         eggBasket.getBasketLabels().contains('Drakes with arms and legs').parent().parent('.basket').should('have.class','selected')
@@ -82,11 +85,45 @@ context('Egg Basket Game tests Challenge 2.1.2', ()=>{
             })
         })
         describe('drop egg in wrong basket', ()=>{
-            it('verify correct ITS message shows when egg is dropped', ()=>{
-                
+            it('verify chromosomes show when egg is clicked',()=>{
+                eggBasket.getEggs().eq(0)
+                    .click({force:true})
+                eggBasket.getChromosomeArea()
+                    .should('be.visible')
+                cy.wait(3000)    
             })
-            it('verify score is decremented', ()=>{
-                
+            it('will get chromosome values, and verify basket clicked on is highlighted', ()=>{
+                var arms=false, legs=false;
+                eggBasket.getGeneLabelText().each(($el, index, $el_list)=>{
+                    cy.wrap($el).text()
+                        .then((text)=>{
+                            if (text=='Arms') {
+                                arms=true;
+                            }
+                            if (text=='Legs') {
+                                legs=true;
+                            }
+                        })
+                }).then(()=>{
+                    if ((arms) && (legs)) {
+                        eggBasket.getBasketLabels().contains('Drakes with only arms').siblings().click({force:true});
+                    } else if (legs) {
+                        eggBasket.getBasketLabels().contains('Drakes with arms and legs').siblings().click({force:true});
+                    } else if (arms){
+                        eggBasket.getBasketLabels().contains('Drakes with only legs').siblings().click({force:true});
+                    }
+                })
+            })
+            it('verify correct ITS message shows when egg is dropped', ()=>{
+                geniventure.getITSHint().should('be.visible').and('contain',"egg doesn't belong")
+            })
+            it('verify score is not incremented', ()=>{
+                cy.get('#egg-hatch').should('be.visible');
+                cy.wait(2000)
+                geniventure.getScoreCount().invoke('text')
+                    .then((text)=>{
+                        expect(text).to.contain('1')
+                })
             })
         })
         describe('verify correct score',()=>{

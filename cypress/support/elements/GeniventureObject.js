@@ -42,6 +42,9 @@ class GeniventureObject{
     getNOTIFICATION_FOOTER () {
         return cy.get('.notification')
     }
+    getITSHint () {
+        return cy.get('.its-hint')
+    }
     closeNotification() {
         cy.log( "in close_notification")
         this.getNOTIFICATION_CLOSE_BUTTON().click()
