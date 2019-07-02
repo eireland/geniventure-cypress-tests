@@ -1,0 +1,18 @@
+{
+    "production": {
+      "url": "wss://guide.intellimedia.ncsu.edu:/guide-protocol",
+      "path": "/v3/socket.io"
+    },
+    "staging": {
+      "url": "wss://imediadev.csc.ncsu.edu:/guide-protocol",
+      "path": "/guide/v3/socket.io"
+    },
+    "cc_server": {
+      "url": "wss://geniventure-its.herokuapp.com:/guide-protocol",
+      "path": "/socket.io"
+    },
+    "cc_server_staging": {
+      "url": "wss://geniventure-its-staging.herokuapp.com:/guide-protocol",
+      "path": "/socket.io"
+    }
+}

@@ -10,7 +10,11 @@
   "license": "ISC",
   "devDependencies": {
     "cypress": "^3.3.1",
-    "cypress-image-snapshot": "^3.0.1"
+    "cypress-image-snapshot": "^3.0.1",
+    "firebase": "^6.2.4",
+    "firebase-admin": "^8.2.0",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0"
   },
   "dependencies": {
     "cypress-commands": "^0.1.1"
