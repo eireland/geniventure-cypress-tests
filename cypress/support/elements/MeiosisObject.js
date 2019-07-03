@@ -30,8 +30,12 @@ class MeiosisObject {
         return ('#target-drake > img')
     }
     getSTABLE_DRAKE() {
-        return cy.get('.stable-drake-overlay')
+        return cy.get('.stable-drake-overlay .organism')
     }
+    getSTABLE_COUNTER(){
+        return cy.get('.stable-counter .stable-count')
+    }
+
   
     selectGender(gender) {
       if (gender=="f"){
@@ -46,9 +50,9 @@ class MeiosisObject {
         this.getDROPDOWN_MENU_ITEM().contains(trait).click();
     }
   
-    // saveDrake() {
-    //     this.getHATCH_DRAKE_BUTTON.click();
-    // }
+    saveDrake() {
+        this.getHATCH_DRAKE_BUTTON().click();
+    }
 
     getCurrentDropDownValue(index){
         return this.getDROPDOWN_TEXT().eq(index).text()
@@ -108,17 +112,5 @@ class MeiosisObject {
             }
         })
     }
-
-
-
-    
-    
-
-    //****** */Put this in the test spec
-    // def verify_drake_in_stable
-    //   puts "in verify drake in stable"
-    //   stable_drakes = find_all(STABLE_DRAKE)
-    //   return stable_drakes.length
-    // end
 }
 export default MeiosisObject

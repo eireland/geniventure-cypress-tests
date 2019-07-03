@@ -1,8 +1,12 @@
 import MeiosisObject from "../support/elements/MeiosisObject";
 import MissionFooterObject from "../support/elements/MissionFooterObject";
+import GeniventureObject from "../support/elements/GeniventureObject";
 
 const meiosis = new MeiosisObject;
 const footer = new MissionFooterObject;
+const geniventure = new GeniventureObject;
+
+const gems=['blue','yellow','red','black'];
 
 context('Meiosis challenges tests', ()=>{
     describe('Challenge 1.2.1', ()=>{
@@ -40,7 +44,15 @@ context('Meiosis challenges tests', ()=>{
             cy.parseDrakeLink('current').should('not.include','hind')
             cy.parseDrakeLink('current').should('include','noWing')   
         })
-        it('will try to get the target drake', ()=>{
+    })
+    describe('Challenge 1.2.2', ()=>{    
+        before(()=>{
+            cy.visit('https://geniventure.concord.org/#/1/2/2');
+            cy.waitForLoadingImage()
+            cy.get('#enter-challenge-hotspot').click();
+            cy.waitForLoadingImage()
+        })
+        it('will submit the correct target drake and verify gem', ()=>{
             cy.waitForTargetDrake();
             cy.parseDrakeLink('target').then((target)=>{
                 //st,m,wing,fore,a5,flair,horn,noRostral,healthy
@@ -53,8 +65,9 @@ context('Meiosis challenges tests', ()=>{
                         meiosis.addTrait('Wings')
                     };
                     if (target.includes('noWing')){
-                        cy.log('has wings')
-                        meiosis.addTrait('Wings')
+                        cy.log('has no wings')
+                        meiosis.removeTrait('Wings')
+                        meiosis.removeTrait('Wings')
                     };
                     if (target.includes('allLimb')){
                         cy.log('has both arms and legs')
@@ -88,10 +101,17 @@ context('Meiosis challenges tests', ()=>{
                     cy.log("current: "+current);
                     cy.log("target: "+target);
                     cy.log(current.every(t=>target.includes(t)))//A.every( e => B.includes(e) )
-                })    
+                    if(current.every(t=>target.includes(t))) {
+                        meiosis.saveDrake();
+                    } 
+                    geniventure.getNOTIFICATION_FOOTER().should('be.visible').and('contain', 'Challenge completed!')
+                    var color = footer.getActionColor()
+                    cy.log("color: "+color)
+                        footer.getGem().should('have.class','gem-fill-'+gems.indexOf(color))
+                }) 
             })
+            
         })
-
     })
     describe('Challenge 1.1.1', ()=>{
         before(()=>{
@@ -123,7 +143,26 @@ context('Meiosis challenges tests', ()=>{
             footer.closeTutorialDialog(); 
         })
         it('verify drakes appear in the stable', ()=>{
-
+            meiosis.getSTABLE_COUNTER().should('contain','0 / 5');
+            meiosis.getHATCH_DRAKE_BUTTON().click();
+            meiosis.getSTABLE_COUNTER().should('contain','1 / 5');
+            meiosis.getSTABLE_DRAKE().should('have.length',1);            
+            meiosis.selectGender('m');
+            cy.wait(1000)
+            meiosis.saveDrake();
+            cy.wait(1000)
+            meiosis.getSTABLE_COUNTER().should('contain','2 / 5');
+            meiosis.getSTABLE_DRAKE().should('have.length',2);
+        })
+        it('verify error message appears if the drake has been previously submitted', ()=>{
+            meiosis.selectGender('f')
+            cy.wait(1000)
+            meiosis.saveDrake();
+            cy.wait(1000)
+            geniventure.getITSHint().should('be.visible').and('contain','You already have a drake that looks just like that!')
+            geniventure.closeNotification();
+            meiosis.getSTABLE_COUNTER().should('contain','2 / 5');
+            meiosis.getSTABLE_DRAKE().should('have.length',2);
         })
     })
 

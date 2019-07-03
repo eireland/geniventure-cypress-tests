@@ -1,5 +1,6 @@
-class MissionFooterObject {
+const gems=['blue','yellow','red','black'];
 
+class MissionFooterObject {
     getLevelNumber() {
         return cy.get('.level-indicator-text')
     }
@@ -12,9 +13,20 @@ class MissionFooterObject {
     getGemSet() {
         return cy.get('.gem-container')
     }
+    getGem(){
+        return cy.get('.gem-fill')
+    }
+    getGemColor(color){
+        return cy.get('.gem-fill-'+gems.indexOf(color))
+    }
     //Moves left, Score
     getActionCounter() {
         return cy.get('.hud-text-area')
+    }
+    getActionColor(){
+        var classArr = Cypress.$('.counter.moves-count')[0].className.split(/\s/);
+        cy.log("color: "+classArr[classArr.length-1])
+        return classArr[classArr.length-1]
     }
 
     //Tutorial Dialog elements -- putting it here since Tutorials can be launched from the Tutorial button

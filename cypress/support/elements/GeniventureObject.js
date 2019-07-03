@@ -44,7 +44,7 @@ class GeniventureObject{
         return cy.get('.score-count')
     }
     getNOTIFICATION_FOOTER () {
-        return cy.get('.notification')
+        return cy.get('.notification.raised')
     }
     getITSHint () {
         return cy.get('.its-hint')
