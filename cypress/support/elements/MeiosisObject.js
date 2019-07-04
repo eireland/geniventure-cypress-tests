@@ -3,7 +3,10 @@ class MeiosisObject {
     recessiveTraits = ['Horns','Albino','Dull','Short tail','Faded'];
 
     getYOUR_DRAKE_IMAGE() {
-        return ("#your-drake .geniblocks.organism img")
+        return ("#your-drake .geniblocks.egg-hatch-drake .egg-image")
+    }
+    getYOUR_EGG_IMAGE() {
+        return ('upi')
     }
     getTARGET_DRAKE_IMAGE() {
         return ('#target-drake > img')
@@ -56,6 +59,20 @@ class MeiosisObject {
 
     getCurrentDropDownValue(index){
         return this.getDROPDOWN_TEXT().eq(index).text()
+    }
+
+    getCurrentGender(currentGender){
+        var gender="";
+            var classArr = Cypress.$('.change-sex-toggle')[0].className.split(/\s/);
+            // cy.log("selected: "+classArr[classArr.length-1])
+            var selected=classArr[classArr.length-1]
+            if (selected=='female-selected') {
+                gender = 'f';
+            }
+            if (selected=='male-selected'){
+                gender = 'm'; 
+            }
+        return gender
     }
     
     addTrait(trait){
