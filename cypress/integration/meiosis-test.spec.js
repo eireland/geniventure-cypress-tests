@@ -172,53 +172,76 @@ context('Meiosis challenges tests', ()=>{
             cy.get('#enter-challenge-hotspot').click();
             cy.waitForLoadingImage()
         })
-        it('will submit the wrong target drake by slecting the wrong gender and verify gem', ()=>{
+        it('will submit the wrong target drake by selecting the wrong gender', ()=>{
             cy.waitForTargetDrake();
             cy.parseDrakeLink('target').then((target)=>{
                 //st,m,wing,fore,a5,flair,horn,noRostral,healthy
                 cy.log("target: "+target);
-    
-                    if (target.includes('wing')){
-                            cy.log('has wings')
-                            meiosis.addTrait('Wings')
-                        };
-                        if (target.includes('noWing')){
-                            cy.log('has no wings')
-                            meiosis.removeTrait('Wings')
-                            meiosis.removeTrait('Wings')
-                        };
-                        if (target.includes('allLimb')){
-                            cy.log('has both arms and legs')
-                            meiosis.addTrait('Arms')
-                            meiosis.addTrait('Legs')
-                        }
-                        if (target.includes('noLimb')) {
-                            meiosis.removeTrait('Arms');
-                            meiosis.removeTrait('Legs');
-                        }
-                        if (target.includes('fore')){
-                            cy.log('has arms only')
-                            meiosis.addTrait('Arms')
-                            meiosis.removeTrait('Legs');
-                        }
-                        if (target.includes('hind')) {
-                            cy.log('has legs only')
-                            meiosis.addTrait('Legs')
-                            meiosis.removeTrait('Arms');
-                        }
-                        cy.log("gender: "+meiosis.getCurrentGender())
-                        if ((target.includes('m')) && (meiosis.getCurrentGender()=='m')){ 
-                            cy.log('is male')                    
-                            meiosis.selectGender("f")
-                        } 
-                        if ((target.includes('f')) && (meiosis.getCurrentGender()=='f')){
-                            cy.log('is female')
-                            meiosis.selectGender('m')
-                        }
-                    meiosis.saveDrake();
-                    cy.wait(3000)
-                    geniventure.getITSHint().should('be.visible').and('contain', "That's not the drake!");
+                if (target.includes('wing')){
+                    cy.log('has wings')
+                    meiosis.addTrait('Wings')
+                };
+                if (target.includes('noWing')){
+                    cy.log('has no wings')
+                    meiosis.removeTrait('Wings')
+                    meiosis.removeTrait('Wings')
+                };
+                if (target.includes('allLimb')){
+                    cy.log('has both arms and legs')
+                    meiosis.addTrait('Arms')
+                    meiosis.addTrait('Legs')
+                }
+                if (target.includes('noLimb')) {
+                    meiosis.removeTrait('Arms');
+                    meiosis.removeTrait('Legs');
+                }
+                if (target.includes('fore')){
+                    cy.log('has arms only')
+                    meiosis.addTrait('Arms')
+                    meiosis.removeTrait('Legs');
+                }
+                if (target.includes('hind')) {
+                    cy.log('has legs only')
+                    meiosis.addTrait('Legs')
+                    meiosis.removeTrait('Arms');
+                }
+                cy.log("gender: "+meiosis.getCurrentGender())
+                if ((target.includes('m')) && (meiosis.getCurrentGender()=='m')){ 
+                    cy.log('is male')                    
+                    meiosis.selectGender("f")
+                } 
+                if ((target.includes('f')) && (meiosis.getCurrentGender()=='f')){
+                    cy.log('is female')
+                    meiosis.selectGender('m')
+                }
+                meiosis.saveDrake();
+                cy.wait(3000)
+                geniventure.getITSHint().should('be.visible').and('contain', "That's not the drake!");
             })
-        })    
+        })
+        it('will submit the wrong gender drake and verify remeditiation is shown', ()=>{
+            geniventure.closeNotification();
+            cy.parseDrakeLink('target').then((target)=>{
+                cy.log("gender: "+meiosis.getCurrentGender())
+                if ((target.includes('m')) && (meiosis.getCurrentGender()=='m')){ 
+                    cy.log('is male')                    
+                    meiosis.selectGender("f");
+                } 
+                if ((target.includes('f')) && (meiosis.getCurrentGender()=='f')){
+                    cy.log('is female')
+                    meiosis.selectGender('m');
+                }
+                meiosis.saveDrake();
+                geniventure.closeNotification();
+                meiosis.saveDrake();
+                cy.wait(3000)
+                geniventure.getITSHint().should('be.visible').and('contain', "Let's do a bonus challenge now");
+            })
+        })
+        it('will verify user is taken to remediation', ()=>{
+            geniventure.gotoNext();
+            geniventure.getITSHint().should('be.visible').and('contain', "simplify things");
+            geniventure.closeNotification();
+        }) 
     })
 })
